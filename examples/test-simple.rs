@@ -3,7 +3,14 @@ extern crate relex;
 
 #[cfg(not(test))]
 fn main() {
-    println!("relex says: {}", relex::test_fn().as_slice());
+    let parse_result = relex::lex("haha", []);
+
+    match parse_result {
+        Some(thing) => (),
+        None => {
+            println!("Parse failed!");
+        }
+    };
 }
 
 
