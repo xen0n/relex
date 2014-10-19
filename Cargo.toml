@@ -1,0 +1,20 @@
+[package]
+
+name = "relex"
+version = "0.0.1"
+authors = ["Wang Xuerui <idontknw.wang@gmail.com>"]
+
+
+[lib]
+
+name = "relex"
+path = "src/lib.rs"
+
+
+[[bin]]
+
+name = "test-simple"
+path = "examples/test-simple.rs"
+test = false
+doctest = false
+doc = false
