@@ -10,6 +10,10 @@ authors = ["Wang Xuerui <idontknw.wang@gmail.com>"]
 name = "relex"
 path = "src/lib.rs"
 
+[dependencies]
+
+regex = "*"
+
 
 [[bin]]
 
