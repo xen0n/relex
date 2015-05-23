@@ -13,12 +13,4 @@ path = "src/lib.rs"
 [dependencies]
 
 regex = "*"
-
-
-[[bin]]
-
-name = "test-simple"
-path = "examples/test-simple.rs"
-test = false
-doctest = false
-doc = false
+log = "*"
