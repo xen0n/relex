@@ -5,9 +5,9 @@ extern crate relex;
 use regex::Captures;
 
 use relex::token::Token;
-use relex::lex::LexRule;
+use relex::rule::LexRule;
 use relex::lex::Lexer;
-use relex::lex::LexerResult;
+use relex::LexerResult;
 
 
 #[cfg(not(test))]
