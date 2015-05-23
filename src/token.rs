@@ -1,19 +1,18 @@
-pub type TokenType = u32;
-
-
 #[derive(Debug)]
-pub struct Token {
-    pub typ: TokenType,
+pub struct Token<T> {
+    pub typ: T,
     pub frag: String,
     pub span: (usize, usize),
     pub line: usize,
 }
 
 
-pub type TokenState = Option<TokenType>;
+/*
+pub type TokenState<T> = Option<TokenType<T>>;
 
 
-pub enum NextTokenState {
+pub enum NextTokenState<T> {
     Keep,
-    NewToken(TokenType),
+    NewToken(TokenType<T>),
 }
+*/

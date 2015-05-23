@@ -1,20 +1,20 @@
 use super::LexerResult;
-use super::token::TokenState;
-use super::token::NextTokenState;
+// use super::token::TokenState;
+// use super::token::NextTokenState;
 use super::rule::LexRule;
 use super::rule::LexRuleMatch;
 
 
-pub struct Lexer<'a> {
+pub struct Lexer<'a, T> {
     source: &'a String,
-    rules: Vec<LexRule>,
+    rules: Vec<LexRule<T>>,
     // pos: usize,
     // prev: TokenState,
 }
 
 
-impl<'a> Lexer<'a> {
-    pub fn new(source: &'a String) -> Lexer<'a> {
+impl<'a, T> Lexer<'a, T> {
+    pub fn new(source: &'a String) -> Lexer<'a, T> {
         Lexer {
             source: source,
             rules: Vec::new(),
@@ -30,18 +30,18 @@ impl<'a> Lexer<'a> {
     }
     */
 
-    pub fn add_rule(&mut self, rule: LexRule) {
+    pub fn add_rule(&mut self, rule: LexRule<T>) {
         self.rules.push(rule);
     }
 
-    pub fn lex(&mut self) -> LexerResult {
+    pub fn lex(&mut self) -> LexerResult<T> {
         // self.reset();
 
         let last_pos = self.source.len() - 1usize;
         debug!("lex: input={}, last_pos={}", self.source, last_pos);
 
         let mut pos = 0usize;
-        let mut _prev : TokenState = None;
+        // let mut _prev : TokenState<T> = None;
         let mut result = Vec::new();
         while pos < last_pos {
             // let curr_pos = pos;
@@ -52,9 +52,9 @@ impl<'a> Lexer<'a> {
                 result.extend(tokens.into_iter());
 
                 // update state
-                if let NextTokenState::NewToken(next_token_state) = next_state.new_state {
-                    _prev = Some(next_token_state);
-                }
+                // if let NextTokenState::NewToken(next_token_state) = next_state.new_state {
+                //     _prev = Some(next_token_state);
+                // }
 
                 pos += next_state.advance;
                 // TODO: lineno
@@ -66,7 +66,7 @@ impl<'a> Lexer<'a> {
         Some(result)
     }
 
-    fn advance(&self, pos: usize) -> LexRuleMatch {
+    fn advance(&self, pos: usize) -> LexRuleMatch<T> {
         // slice the input
         let input_ahead = &self.source[pos ..];
 
@@ -79,7 +79,7 @@ impl<'a> Lexer<'a> {
 
         LexRuleMatch {
             result: None,
-            new_state: NextTokenState::Keep,
+            // new_state: NextTokenState::Keep,
             advance: 0,
             advance_lineno: 0,
         }

@@ -8,7 +8,7 @@ pub mod rule;
 pub mod handler;
 pub mod lex;
 
-pub type LexerResult = Option<Vec<self::token::Token>>;
+pub type LexerResult<T> = Option<Vec<T>>;
 
 
 #[macro_export]
