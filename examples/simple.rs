@@ -1,74 +1,78 @@
 extern crate regex;
 
+#[macro_use]
 extern crate relex;
 
 use regex::Captures;
 
 use relex::token::Token;
-use relex::rule::LexRule;
 use relex::lex::Lexer;
 use relex::LexerResult;
 
 
-#[cfg(not(test))]
 fn main() {
     let test_input = "_haha { heheHEHE { x123; } } abcd".to_string();
     let mut lexer = Lexer::new(&test_input);
 
-    lexer.add_rule(LexRule::new(
+    add_lex_rule!(
+            lexer,
             r"^[A-Za-z_][0-9A-Za-z_-]*",
-            Box::new(move |m: Captures| -> LexerResult {
+            move |m: Captures| -> LexerResult {
                 Some(vec![Token {
                     typ: 0,
                     frag: m.at(0).unwrap().to_string(),
                     span: m.pos(0).unwrap(),
                     line: 0usize,
                 }])
-            }),
-            ));
+            },
+            );
 
-    lexer.add_rule(LexRule::new(
+    add_lex_rule!(
+            lexer,
             r"^\s+",
-            Box::new(move |_m: Captures| -> LexerResult {
+            move |_m: Captures| -> LexerResult {
                 Some(vec![])
-            }),
-            ));
+            },
+            );
 
-    lexer.add_rule(LexRule::new(
+    add_lex_rule!(
+            lexer,
             r"^\{",
-            Box::new(move |m: Captures| -> LexerResult {
+            move |m: Captures| -> LexerResult {
                 Some(vec![Token {
                     typ: 1,
                     frag: m.at(0).unwrap().to_string(),
                     span: m.pos(0).unwrap(),
                     line: 0usize,
                 }])
-            }),
-            ));
+            },
+            );
 
-    lexer.add_rule(LexRule::new(
+    add_lex_rule!(
+            lexer,
             r"^\}",
-            Box::new(move |m: Captures| -> LexerResult {
+            move |m: Captures| -> LexerResult {
                 Some(vec![Token {
                     typ: 2,
                     frag: m.at(0).unwrap().to_string(),
                     span: m.pos(0).unwrap(),
                     line: 0usize,
                 }])
-            }),
-            ));
+            },
+            );
 
-    lexer.add_rule(LexRule::new(
+    add_lex_rule!(
+            lexer,
             r"^;",
-            Box::new(move |m: Captures| -> LexerResult {
+            move |m: Captures| -> LexerResult {
                 Some(vec![Token {
                     typ: 3,
                     frag: m.at(0).unwrap().to_string(),
                     span: m.pos(0).unwrap(),
                     line: 0usize,
                 }])
-            }),
-            ));
+            },
+            );
 
     println!("Parsing input: {:?}", test_input);
     let parse_result = lexer.lex();
