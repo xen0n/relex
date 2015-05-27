@@ -6,6 +6,7 @@ extern crate relex;
 use regex::Captures;
 
 use relex::token::Token;
+use relex::token::Span;
 use relex::lex::Lexer;
 use relex::LexerResult;
 
@@ -23,11 +24,11 @@ fn main() {
     add_lex_rule!(
             lexer,
             r"^[A-Za-z_][0-9A-Za-z_-]*",
-            move |m: Captures, _s: &mut u32| -> U32LexerResult {
+            move |m: Captures, sp: Span, _s: &mut u32| -> U32LexerResult {
                 Some(vec![U32Token {
                     typ: 0,
                     frag: m.at(0).unwrap().to_string(),
-                    span: m.pos(0).unwrap(),
+                    span: sp,
                     line: 0usize,
                 }])
             },
@@ -36,7 +37,7 @@ fn main() {
     add_lex_rule!(
             lexer,
             r"^\s+",
-            move |_m: Captures, _s: &mut u32| -> U32LexerResult {
+            move |_m: Captures, _sp: Span, _s: &mut u32| -> U32LexerResult {
                 Some(vec![])
             },
             );
@@ -44,11 +45,11 @@ fn main() {
     add_lex_rule!(
             lexer,
             r"^\{",
-            move |m: Captures, _s: &mut u32| -> U32LexerResult {
+            move |m: Captures, sp: Span, _s: &mut u32| -> U32LexerResult {
                 Some(vec![U32Token {
                     typ: 1,
                     frag: m.at(0).unwrap().to_string(),
-                    span: m.pos(0).unwrap(),
+                    span: sp,
                     line: 0usize,
                 }])
             },
@@ -57,11 +58,11 @@ fn main() {
     add_lex_rule!(
             lexer,
             r"^\}",
-            move |m: Captures, _s: &mut u32| -> U32LexerResult {
+            move |m: Captures, sp: Span, _s: &mut u32| -> U32LexerResult {
                 Some(vec![U32Token {
                     typ: 2,
                     frag: m.at(0).unwrap().to_string(),
-                    span: m.pos(0).unwrap(),
+                    span: sp,
                     line: 0usize,
                 }])
             },
@@ -70,11 +71,11 @@ fn main() {
     add_lex_rule!(
             lexer,
             r"^;",
-            move |m: Captures, _s: &mut u32| -> U32LexerResult {
+            move |m: Captures, sp: Span, _s: &mut u32| -> U32LexerResult {
                 Some(vec![U32Token {
                     typ: 3,
                     frag: m.at(0).unwrap().to_string(),
-                    span: m.pos(0).unwrap(),
+                    span: sp,
                     line: 0usize,
                 }])
             },

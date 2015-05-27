@@ -26,12 +26,13 @@ impl<T, S> LexRule<T, S> {
         }
     }
 
-    pub fn execute(&self, input: &str, state: &mut S) -> LexRuleMatch<T> {
+    pub fn execute(&self, input: &str, offset: usize, state: &mut S) -> LexRuleMatch<T> {
         if let Some(captures) = self.rule.captures(input) {
-            let (_span_start, span_end) = captures.pos(0).unwrap();
-            debug!("LexRule::execute: YES: {}, span_end={}", self.rule, span_end);
+            let (span_start, span_end) = captures.pos(0).unwrap();
+            let span_xlated = (span_start + offset, span_end + offset);
+            debug!("LexRule::execute: YES: {}, span_xlated={:?}", self.rule, span_xlated);
 
-            if let Some(tokens) = (self.handler)(captures, state) {
+            if let Some(tokens) = (self.handler)(captures, span_xlated, state) {
                 LexRuleMatch {
                     result: Some(tokens),
                     advance: span_end,

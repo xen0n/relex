@@ -6,6 +6,7 @@ pub struct Token<T> {
     pub line: usize,
 }
 
+pub type Span = (usize, usize);
 
 /*
 pub type TokenState<T> = Option<TokenType<T>>;
