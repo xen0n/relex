@@ -20,7 +20,7 @@ enum WRLTokenType {
     LITERAL(String),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct WRLToken {
     typ: WRLTokenType,
     span: (usize, usize),
@@ -36,17 +36,6 @@ struct WRLLexerState {
 
 type WRLLexer<'a> = Lexer<'a, WRLToken, WRLLexerState>;
 type WRLLexerResult = LexerResult<WRLToken>;
-
-
-impl Clone for WRLToken {
-    fn clone(&self) -> Self {
-        WRLToken {
-            typ: self.typ.clone(),
-            span: self.span,
-            line: self.line,
-        }
-    }
-}
 
 
 fn main() {
