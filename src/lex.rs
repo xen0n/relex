@@ -1,3 +1,4 @@
+use super::Wstr;
 use super::LexerResult;
 use super::handler::PostProcessor;
 use super::rule::LexRule;
@@ -30,14 +31,19 @@ impl<'a, T, S> Lexer<'a, T, S> {
         self.postprocessor = Some(f);
     }
 
+    fn unpack_source_into_wstr(&self) -> Wstr {
+        self.source.chars().collect()
+    }
+
     pub fn lex(&mut self) -> LexerResult<T> {
         let last_pos = self.source.len() - 1usize;
         debug!("lex: input={}, last_pos={}", self.source, last_pos);
 
+        let input_unpacked = self.unpack_source_into_wstr();
         let mut pos = 0usize;
         let mut result = Vec::new();
         while pos < last_pos {
-            let next_state = self.advance(pos);
+            let next_state = self.advance(pos, &input_unpacked);
 
             if let Some(tokens) = next_state.result {
                 // stash result
@@ -57,13 +63,13 @@ impl<'a, T, S> Lexer<'a, T, S> {
         }
     }
 
-    fn advance(&mut self, pos: usize) -> LexRuleMatch<T> {
+    fn advance(&mut self, pos: usize, input_unpacked: &Wstr) -> LexRuleMatch<T> {
         // slice the input
         let input_ahead = &self.source[pos ..];
         let eof = input_ahead.len() == 0;
 
         for rule in self.rules.iter() {
-            let rule_match = rule.execute(input_ahead, pos, eof, self.source, &mut self.state);
+            let rule_match = rule.execute(input_ahead, pos, eof, input_unpacked, &mut self.state);
             if let Some(_) = rule_match.result {
                 return rule_match;
             }

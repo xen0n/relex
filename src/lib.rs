@@ -8,6 +8,7 @@ pub mod rule;
 pub mod handler;
 pub mod lex;
 
+pub type Wstr = Vec<char>;
 pub type LexerResult<T> = Option<Vec<T>>;
 
 

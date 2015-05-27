@@ -2,6 +2,7 @@ extern crate regex;
 
 use regex::Regex;
 
+use super::Wstr;
 use super::LexerResult;
 use super::handler::RuleHandler;
 
@@ -26,7 +27,7 @@ impl<T, S> LexRule<T, S> {
         }
     }
 
-    pub fn execute(&self, ahead: &str, offset: usize, eof: bool, input: &String, state: &mut S) -> LexRuleMatch<T> {
+    pub fn execute(&self, ahead: &str, offset: usize, eof: bool, input: &Wstr, state: &mut S) -> LexRuleMatch<T> {
         if let Some(captures) = self.rule.captures(ahead) {
             let (span_start, span_end) = captures.pos(0).unwrap();
             let span_xlated = (span_start + offset, span_end + offset);
