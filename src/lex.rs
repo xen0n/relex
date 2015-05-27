@@ -1,6 +1,7 @@
 use super::LexerResult;
 // use super::token::TokenState;
 // use super::token::NextTokenState;
+use super::handler::PostProcessor;
 use super::rule::LexRule;
 use super::rule::LexRuleMatch;
 
@@ -8,6 +9,7 @@ use super::rule::LexRuleMatch;
 pub struct Lexer<'a, T> {
     source: &'a String,
     rules: Vec<LexRule<T>>,
+    postprocessor: Option<Box<PostProcessor<T>>>,
     // pos: usize,
     // prev: TokenState,
 }
@@ -18,6 +20,7 @@ impl<'a, T> Lexer<'a, T> {
         Lexer {
             source: source,
             rules: Vec::new(),
+            postprocessor: None,
             // pos: 0usize,
             // prev: None,
         }
@@ -32,6 +35,10 @@ impl<'a, T> Lexer<'a, T> {
 
     pub fn add_rule(&mut self, rule: LexRule<T>) {
         self.rules.push(rule);
+    }
+
+    pub fn set_postprocessor(&mut self, f: Box<PostProcessor<T>>) {
+        self.postprocessor = Some(f);
     }
 
     pub fn lex(&mut self) -> LexerResult<T> {
@@ -63,7 +70,11 @@ impl<'a, T> Lexer<'a, T> {
             }
         }
 
-        Some(result)
+        if let Some(ref postprocessor_fn) = self.postprocessor {
+            postprocessor_fn(Some(result))
+        } else {
+            Some(result)
+        }
     }
 
     fn advance(&self, pos: usize) -> LexRuleMatch<T> {
