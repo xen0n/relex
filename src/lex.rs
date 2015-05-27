@@ -63,7 +63,7 @@ impl<'a, T, S> Lexer<'a, T, S> {
         let eof = input_ahead.len() == 0;
 
         for rule in self.rules.iter() {
-            let rule_match = rule.execute(input_ahead, pos, eof, &mut self.state);
+            let rule_match = rule.execute(input_ahead, pos, eof, self.source, &mut self.state);
             if let Some(_) = rule_match.result {
                 return rule_match;
             }

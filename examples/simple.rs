@@ -24,7 +24,7 @@ fn main() {
     add_lex_rule!(
             lexer,
             r"^[A-Za-z_][0-9A-Za-z_-]*",
-            move |m: Captures, sp: Span, _eof: bool, _s: &mut u32| -> U32LexerResult {
+            move |m: Captures, sp: Span, _eof: bool, _inp: &String, _s: &mut u32| -> U32LexerResult {
                 Some(vec![U32Token {
                     typ: 0,
                     frag: m.at(0).unwrap().to_string(),
@@ -37,7 +37,7 @@ fn main() {
     add_lex_rule!(
             lexer,
             r"^\s+",
-            move |_m: Captures, _sp: Span, _eof: bool, _s: &mut u32| -> U32LexerResult {
+            move |_m: Captures, _sp: Span, _eof: bool, _inp: &String, _s: &mut u32| -> U32LexerResult {
                 Some(vec![])
             },
             );
@@ -45,7 +45,7 @@ fn main() {
     add_lex_rule!(
             lexer,
             r"^\{",
-            move |m: Captures, sp: Span, _eof: bool, _s: &mut u32| -> U32LexerResult {
+            move |m: Captures, sp: Span, _eof: bool, _inp: &String, _s: &mut u32| -> U32LexerResult {
                 Some(vec![U32Token {
                     typ: 1,
                     frag: m.at(0).unwrap().to_string(),
@@ -58,7 +58,7 @@ fn main() {
     add_lex_rule!(
             lexer,
             r"^\}",
-            move |m: Captures, sp: Span, _eof: bool, _s: &mut u32| -> U32LexerResult {
+            move |m: Captures, sp: Span, _eof: bool, _inp: &String, _s: &mut u32| -> U32LexerResult {
                 Some(vec![U32Token {
                     typ: 2,
                     frag: m.at(0).unwrap().to_string(),
@@ -71,7 +71,7 @@ fn main() {
     add_lex_rule!(
             lexer,
             r"^;",
-            move |m: Captures, sp: Span, _eof: bool, _s: &mut u32| -> U32LexerResult {
+            move |m: Captures, sp: Span, _eof: bool, _inp: &String, _s: &mut u32| -> U32LexerResult {
                 Some(vec![U32Token {
                     typ: 3,
                     frag: m.at(0).unwrap().to_string(),
