@@ -60,9 +60,10 @@ impl<'a, T, S> Lexer<'a, T, S> {
     fn advance(&mut self, pos: usize) -> LexRuleMatch<T> {
         // slice the input
         let input_ahead = &self.source[pos ..];
+        let eof = input_ahead.len() == 0;
 
         for rule in self.rules.iter() {
-            let rule_match = rule.execute(input_ahead, pos, &mut self.state);
+            let rule_match = rule.execute(input_ahead, pos, eof, &mut self.state);
             if let Some(_) = rule_match.result {
                 return rule_match;
             }
