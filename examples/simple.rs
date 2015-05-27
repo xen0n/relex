@@ -10,18 +10,20 @@ use relex::lex::Lexer;
 use relex::LexerResult;
 
 type U32Token = Token<u32>;
-type U32Lexer<'a> = Lexer<'a, U32Token>;
+type U32Lexer<'a> = Lexer<'a, U32Token, u32>;
 type U32LexerResult = LexerResult<U32Token>;
 
 
 fn main() {
     let test_input = "_haha { heheHEHE { x123; } } abcd".to_string();
-    let mut lexer = U32Lexer::new(&test_input);
+
+    // state is not used in this example
+    let mut lexer = U32Lexer::new(&test_input, 0);
 
     add_lex_rule!(
             lexer,
             r"^[A-Za-z_][0-9A-Za-z_-]*",
-            move |m: Captures| -> U32LexerResult {
+            move |m: Captures, _s: &mut u32| -> U32LexerResult {
                 Some(vec![U32Token {
                     typ: 0,
                     frag: m.at(0).unwrap().to_string(),
@@ -34,7 +36,7 @@ fn main() {
     add_lex_rule!(
             lexer,
             r"^\s+",
-            move |_m: Captures| -> U32LexerResult {
+            move |_m: Captures, _s: &mut u32| -> U32LexerResult {
                 Some(vec![])
             },
             );
@@ -42,7 +44,7 @@ fn main() {
     add_lex_rule!(
             lexer,
             r"^\{",
-            move |m: Captures| -> U32LexerResult {
+            move |m: Captures, _s: &mut u32| -> U32LexerResult {
                 Some(vec![U32Token {
                     typ: 1,
                     frag: m.at(0).unwrap().to_string(),
@@ -55,7 +57,7 @@ fn main() {
     add_lex_rule!(
             lexer,
             r"^\}",
-            move |m: Captures| -> U32LexerResult {
+            move |m: Captures, _s: &mut u32| -> U32LexerResult {
                 Some(vec![U32Token {
                     typ: 2,
                     frag: m.at(0).unwrap().to_string(),
@@ -68,7 +70,7 @@ fn main() {
     add_lex_rule!(
             lexer,
             r"^;",
-            move |m: Captures| -> U32LexerResult {
+            move |m: Captures, _s: &mut u32| -> U32LexerResult {
                 Some(vec![U32Token {
                     typ: 3,
                     frag: m.at(0).unwrap().to_string(),
